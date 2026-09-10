@@ -1,0 +1,15 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # -s sh: this script runs under whatever /bin/sh a fresh machine has, so
+      # it must be free of bashisms. shellcheck reads the shebang, but pinning
+      # the dialect keeps a stray `#!/bin/bash` from silently widening it.
+      - run: shellcheck -s sh install.sh
