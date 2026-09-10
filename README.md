@@ -3,7 +3,7 @@
 The public entry point to a private dotfiles repo.
 
 ```sh
-sh -c "$(curl -fsSL https://nocnokneo.github.io/dotfiles-bootstrap/install.sh)"
+sh -c "$(curl -fsSL https://get.braun-jones.org/install.sh)"
 ```
 
 ## Why this repo exists
@@ -46,4 +46,5 @@ The helper is passed to the one clone that needs it through `GIT_CONFIG_COUNT`/`
 GitHub Pages, deployed from the default branch root, so there is no build step and no deploy workflow to fail.
 `.nojekyll` makes Pages serve `install.sh` verbatim.
 
-To move this to a custom domain later, add a `CNAME` file and update `BOOTSTRAP_URL` in `install.sh` -- it appears in the error message the TTY guard prints, and nowhere else.
+`CNAME` points the site at `get.braun-jones.org`, a subdomain CNAMEd to `nocnokneo.github.io` at the DNS host.
+Moving it again means changing three things in step: the DNS record, `CNAME`, and the URL in `install.sh`, `index.html` and this file.

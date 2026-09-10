@@ -7,7 +7,7 @@
 # one. Everything after that is `chezmoi init --apply`, unchanged.
 #
 # Run it as:
-#     sh -c "$(curl -fsSL https://nocnokneo.github.io/dotfiles-bootstrap/install.sh)"
+#     sh -c "$(curl -fsSL https://get.braun-jones.org/install.sh)"
 #
 # NOT `curl ... | sh`. Piping consumes stdin, so `gh auth login` would read the
 # rest of this script as keystrokes instead of prompting. See the TTY guard.
@@ -16,7 +16,7 @@
 set -eu
 
 DOTFILES_REPO="${DOTFILES_REPO:-nocnokneo/dotfiles}"
-BOOTSTRAP_URL="https://nocnokneo.github.io/dotfiles-bootstrap/install.sh"
+BOOTSTRAP_URL="https://get.braun-jones.org/install.sh"
 BIN_DIR="${HOME}/.local/bin"
 
 die() {
