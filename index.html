@@ -6,14 +6,60 @@
   body { font: 16px/1.6 system-ui, sans-serif; max-width: 46rem; margin: 4rem auto; padding: 0 1.5rem; }
   pre { background: #f4f4f5; padding: 1rem; border-radius: 6px; overflow-x: auto; }
   code { font: 14px/1.5 ui-monospace, monospace; }
+
+  /* Reserve the gutter on the <pre> itself, so a long command scrolls under the
+     button instead of colliding with it. */
+  .snippet { position: relative; }
+  .snippet pre { padding-right: 5rem; }
+  .copy {
+    position: absolute; top: .5rem; right: .5rem;
+    font: 500 12px/1 system-ui, sans-serif; padding: .45rem .7rem;
+    border: 1px solid #d4d4d8; border-radius: 5px;
+    background: #fff; color: #3f3f46; cursor: pointer;
+  }
+  .copy:hover { background: #fafafa; border-color: #a1a1aa; }
+  .copy:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+  .copy[data-state="copied"] { background: #f0fdf4; border-color: #86efac; color: #15803d; }
+  .copy[data-state="failed"] { background: #fef2f2; border-color: #fca5a5; color: #b91c1c; }
 </style>
 <h1>dotfiles-bootstrap</h1>
 <p>Public entry point to a private dotfiles repo. Run this on a new machine:</p>
-<pre><code>sh -c "$(curl -fsSL https://nocnokneo.github.io/dotfiles-bootstrap/install.sh)"</code></pre>
-<p>
-  Not <code>curl … | sh</code> &mdash; piping leaves <code>gh auth login</code> no terminal to prompt on.
-</p>
+<div class="snippet">
+  <pre><code id="command">sh -c "$(curl -fsSL https://nocnokneo.github.io/dotfiles-bootstrap/install.sh)"</code></pre>
+  <button type="button" class="copy" data-copies="command" aria-live="polite">Copy</button>
+</div>
 <p>
   <a href="install.sh">Read the script</a> &middot;
   <a href="https://github.com/nocnokneo/dotfiles-bootstrap">Source</a>
 </p>
+<script>
+  document.querySelectorAll(".copy").forEach(function (button) {
+    var source = document.getElementById(button.dataset.copies);
+
+    // navigator.clipboard is undefined outside a secure context. Hide the
+    // button rather than leave one that throws on click -- the text stays
+    // selectable either way.
+    if (!navigator.clipboard) {
+      button.hidden = true;
+      return;
+    }
+
+    function flash(state, label) {
+      button.dataset.state = state;
+      button.textContent = label;
+      setTimeout(function () {
+        delete button.dataset.state;
+        button.textContent = "Copy";
+      }, 1500);
+    }
+
+    button.addEventListener("click", function () {
+      // textContent, so the command is copied exactly as rendered: quotes,
+      // $( ) and all.
+      navigator.clipboard.writeText(source.textContent).then(
+        function () { flash("copied", "Copied"); },
+        function () { flash("failed", "Press ⌘/Ctrl+C"); }
+      );
+    });
+  });
+</script>
